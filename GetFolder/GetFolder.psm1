@@ -64,13 +64,21 @@ Will create an OpenFileDialog box with the filter: "CSV (*.csv)" (which shows on
 #>
 function Get-FileName
 {
-  param([Parameter(Mandatory=$false)][string]$Filter, [Parameter(Mandatory=$false)][switch]$Obj,[Parameter(Mandatory=$False)][string]$Title)
+  # god lord dont smash this on one line
+  param(
+      [Parameter(Mandatory=$false)]
+      [string] $Filter,
+      [Parameter(Mandatory=$false)]
+      [switch]$Obj, ## worst var name ever, how on earth will a user know what to give it?
+      [Parameter(Mandatory=$False)]
+      [string]$Title = "Select A File"
+    )
   #  Mandatory = $false
   #  $Filter = "All Files | *.*",
   #  [switch]$Obj,
   #  $Title="Select User List Input File"
   #)
-    if(!($Title)) { $Title="Select Input File"}
+    #if(!($Title)) { $Title="Select Input File"} ## why not a default like i showed?
   
 	[System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms") | Out-Null
 	$OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
@@ -84,6 +92,7 @@ function Get-FileName
   $OpenFileDialog.filter = $Filter
   }
   $OpenFileDialog.ShowDialog() | Out-Null
+  ## dont bother asking, just give back the object
   IF($OBJ){
   $fileobject = GI -Path $OpenFileDialog.FileName.tostring()
   Return $fileObject
